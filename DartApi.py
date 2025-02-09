@@ -13,7 +13,7 @@ api_key='a7910deaf71437b7ca18e2184ea4c9696eb82ecb'
 
 
 params = {
-    "crtfc_key": key
+    "crtfc_key": api_key
 }
 resp = requests.get(url, params=params)
 
