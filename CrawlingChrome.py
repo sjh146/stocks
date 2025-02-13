@@ -17,7 +17,7 @@ def Crawl():
     options.add_experimental_option('detach',True)
 
     options.binary_location ="C:\Program Files\Google\Chrome\Application\chrome.exe"
-    s = service.Service("./chromedriver-win64")
+    s = service.Service("C:/Users/Admin/chromedriver-win64/chromedriver-win64/Chromedriver.exe")
     #"C:/Users/Admin/chromedriver-win64/chromedriver-win64"
     #"./chromedriver-win64"
     browser=webdriver.Chrome(options=options, service = s)
@@ -48,7 +48,7 @@ def Crawl():
         parent=checkbox.find_element(By.XPATH,'..')
         label=parent.find_element(By.TAG_NAME,'label')
         # print(label.text)
-        if label.text in cw.items_to_select:
+        if label.text in cw.MyApp.items_to_select:
             checkbox.click()
 
     btn_apply=browser.find_element(By.XPATH,'//a[@href="javascript:fieldSubmit()"]')
