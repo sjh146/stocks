@@ -36,11 +36,6 @@ for checkbox in checkboxes:
     if checkbox.is_selected():
         checkbox.click()
 
-MarketPrice='시가'
-TradingVolume='거래량'
-CostLiness='고가'
-LowPrice='저가'
-BidPrice='매수호가'
 
 
 

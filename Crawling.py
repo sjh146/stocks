@@ -9,19 +9,36 @@ class MyApp(QWidget):
         super().__init__()
         self.initUI()
    
+    a=[]
 
-
-
+    MarketPrice='시가'
+    TradingVolume='거래량'
+    CostLiness='고가'
+    LowPrice='저가'
+    BidPrice='매수호가'
 
     def initUI(self):
            
-        mp = QCheckBox('거래량', self)
-        mp.move(30, 50)
+        mp = QCheckBox(self.TradingVolume, self)
+        mp.move(30, 30)
         mp.stateChanged.connect(self.changeTitle)
 
-            
+        mp = QCheckBox(self.MarketPrice, self)
+        mp.move(30, 60)
+        mp.stateChanged.connect(self.changeTitle)      
+
+        mp = QCheckBox(self.CostLiness, self)
+        mp.move(30, 90)
+        mp.stateChanged.connect(self.changeTitle)
 
 
+        mp = QCheckBox(self.LowPrice, self)
+        mp.move(100, 30)
+        mp.stateChanged.connect(self.changeTitle)
+
+        mp = QCheckBox(self.BidPrice, self)
+        mp.move(100, 60)
+        mp.stateChanged.connect(self.changeTitle)
 
         self.setWindowTitle('QCheckBox')
         self.setGeometry(300, 300, 300, 200)
@@ -29,7 +46,8 @@ class MyApp(QWidget):
 
     def changeTitle(self, state):
         if state == Qt.Checked:
-            self.setWindowTitle('QCheckBox')
+           self.a=self
+
         else:
             self.setWindowTitle(' ')
 
