@@ -1,58 +1,100 @@
+import os
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QCheckBox
+from PyQt5.QtWidgets import QApplication, QWidget, QCheckBox, QPushButton
 from PyQt5.QtCore import Qt
+import CrawlingChrome as cc
 
-
+try:
+    os.chdir(sys._MEIPASS)
+    print(sys._MEIPASS)
+except:
+    os.chdir(os.getcwd())
 class MyApp(QWidget):
 
-    def __init__(self):
-        super().__init__()
-        self.initUI()
-   
-    a=[]
+    items_to_select =['']
 
     MarketPrice='시가'
     TradingVolume='거래량'
     CostLiness='고가'
     LowPrice='저가'
     BidPrice='매수호가'
-
+    
+    def __init__(self):
+        super().__init__()
+        self.initUI()
+   
+   
+   
     def initUI(self):
            
-        mp = QCheckBox(self.TradingVolume, self)
-        mp.move(30, 30)
-        mp.stateChanged.connect(self.changeTitle)
+        tv = QCheckBox(self.TradingVolume, self)
+        tv.move(30, 30)
+        tv.stateChanged.connect(self.ServeTv)
 
         mp = QCheckBox(self.MarketPrice, self)
         mp.move(30, 60)
-        mp.stateChanged.connect(self.changeTitle)      
+        mp.stateChanged.connect(self.ServeMp)      
 
-        mp = QCheckBox(self.CostLiness, self)
-        mp.move(30, 90)
-        mp.stateChanged.connect(self.changeTitle)
+        cl = QCheckBox(self.CostLiness, self)
+        cl.move(30, 90)
+        cl.stateChanged.connect(self.ServeCl)
 
 
-        mp = QCheckBox(self.LowPrice, self)
-        mp.move(100, 30)
-        mp.stateChanged.connect(self.changeTitle)
+        lp = QCheckBox(self.LowPrice, self)
+        lp.move(100, 30)
+        lp.stateChanged.connect(self.ServeLp)
 
-        mp = QCheckBox(self.BidPrice, self)
-        mp.move(100, 60)
-        mp.stateChanged.connect(self.changeTitle)
+        bp = QCheckBox(self.BidPrice, self)
+        bp.move(100, 60)
+        bp.stateChanged.connect(self.ServeBp)
 
-        self.setWindowTitle('QCheckBox')
+        fbtn = QPushButton('완료',self)
+        fbtn.move(100,90)
+        fbtn.setCheckable(False)
+        fbtn.clicked.connect(self.Pbtn)
+
+        
         self.setGeometry(300, 300, 300, 200)
         self.show()
 
-    def changeTitle(self, state):
+    def ServeTv(self, state):
         if state == Qt.Checked:
-           self.a=self
+           self.items_to_select=self.TradingVolume
 
-        else:
-            self.setWindowTitle(' ')
+        
+
+    def ServeMp(self, state):
+        if state == Qt.Checked:
+           self.items_to_select=self.MarketPrice
+
+       
+    def ServeCl(self, state):
+        if state == Qt.Checked:
+           self.items_to_select=self.CostLiness
+
+     
+    def ServeLp(self, state):
+        if state == Qt.Checked:
+           self.items_to_select=self.LowPrice
+
+       
+    def ServeBp(self, state):
+        if state == Qt.Checked:
+           self.items_to_select=self.BidPrice
+
+       
+
+   
+
+    def Pbtn(self):
+        
+       cc.Crawl()
 
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     ex = MyApp()
     sys.exit(app.exec_())
+    
+   
+
