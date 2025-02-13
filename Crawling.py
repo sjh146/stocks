@@ -2,7 +2,8 @@ import os
 import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QCheckBox, QPushButton
 from PyQt5.QtCore import Qt
-import CrawlingChrome as cc
+from CrawlingChrome import items_to_select as cc
+from CrawlingChrome import Crawl 
 
 try:
     os.chdir(sys._MEIPASS)
@@ -11,8 +12,8 @@ except:
     os.chdir(os.getcwd())
 class MyApp(QWidget):
 
-    items_to_select =['']
-
+    
+    
     MarketPrice='시가'
     TradingVolume='거래량'
     CostLiness='고가'
@@ -26,7 +27,7 @@ class MyApp(QWidget):
    
    
     def initUI(self):
-           
+         
         tv = QCheckBox(self.TradingVolume, self)
         tv.move(30, 30)
         tv.stateChanged.connect(self.ServeTv)
@@ -59,28 +60,28 @@ class MyApp(QWidget):
 
     def ServeTv(self, state):
         if state == Qt.Checked:
-           self.items_to_select=self.TradingVolume
+           cc.append(self.TradingVolume)
 
         
 
     def ServeMp(self, state):
         if state == Qt.Checked:
-           self.items_to_select=self.MarketPrice
+           cc.append(self.MarketPrice)
 
        
     def ServeCl(self, state):
         if state == Qt.Checked:
-           self.items_to_select=self.CostLiness
+           cc.append(self.CostLiness)
 
      
     def ServeLp(self, state):
         if state == Qt.Checked:
-           self.items_to_select=self.LowPrice
+           cc.append(self.LowPrice)
 
        
     def ServeBp(self, state):
         if state == Qt.Checked:
-           self.items_to_select=self.BidPrice
+           cc.append(self.BidPrice)
 
        
 
@@ -88,9 +89,9 @@ class MyApp(QWidget):
 
     def Pbtn(self):
         
-       cc.Crawl()
+       Crawl()
 
-
+    
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     ex = MyApp()

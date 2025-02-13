@@ -5,12 +5,13 @@ from selenium.webdriver.chrome import service
 from selenium.webdriver.common.by import By
 from io import StringIO
 import os
-import Crawling as cw
+#import Crawling as cw
 
 
 
-
+items_to_select =[] 
 def Crawl():
+   
     options = webdriver.ChromeOptions()
     options.add_experimental_option('excludeSwitches',['enable-logging'])
     options.use_chromium = True
@@ -38,17 +39,11 @@ def Crawl():
             checkbox.click()
 
 
-
-
-
-
-
-
     for checkbox in checkboxes:
         parent=checkbox.find_element(By.XPATH,'..')
         label=parent.find_element(By.TAG_NAME,'label')
         # print(label.text)
-        if label.text in cw.MyApp.items_to_select:
+        if label.text in items_to_select:
             checkbox.click()
 
     btn_apply=browser.find_element(By.XPATH,'//a[@href="javascript:fieldSubmit()"]')
