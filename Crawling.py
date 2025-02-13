@@ -15,10 +15,12 @@ try:
     print(sys._MEIPASS)
 except:
     os.chdir(os.getcwd())
+
+
 class MyApp(QWidget):
 
     
-    items_to_select =[] 
+    
     MarketPrice='시가'
     TradingVolume='거래량'
     CostLiness='고가'
@@ -57,12 +59,12 @@ class MyApp(QWidget):
         fbtn = QPushButton('완료',self)
         fbtn.move(100,90)
         fbtn.setCheckable(False)
-        fbtn.clicked.connect(self.Pbtn)
+        fbtn.clicked.connect(self.Crawl)
 
         
         self.setGeometry(300, 300, 300, 200)
         self.show()
-
+    items_to_select =[] 
     def ServeTv(self, state):
         if state == Qt.Checked:
            self.items_to_select.append(self.TradingVolume)
@@ -89,15 +91,15 @@ class MyApp(QWidget):
            self.items_to_select.append(self.BidPrice)
 
     
-    def Pbtn(self):
+    #def Pbtn():
         
-       self.Crawl()
+       
 
     
 #브라우저
     
 
-    def Crawl():
+    def Crawl(self):
    
         options = webdriver.ChromeOptions()
         options.add_experimental_option('excludeSwitches',['enable-logging'])
@@ -106,7 +108,7 @@ class MyApp(QWidget):
 
         options.binary_location ="C:\Program Files\Google\Chrome\Application\chrome.exe"
         s = service.Service("./chromedriver-win64")
-        #"C:/Users/Admin/chromedriver-win64/chromedriver-win64"
+        #"C:/Users/Admin/chromedriver-win64/chromedriver-win64/chromedriver.exe"
         #"./chromedriver-win64"
         browser=webdriver.Chrome(options=options, service = s)
         browser.maximize_window()
@@ -124,7 +126,7 @@ class MyApp(QWidget):
             parent=checkbox.find_element(By.XPATH,'..')
             label=parent.find_element(By.TAG_NAME,'label')
             # print(label.text)
-            if label.text in items_to_select:
+            if label.text in MyApp.items_to_select:
                 checkbox.click()
 
         btn_apply=browser.find_element(By.XPATH,'//a[@href="javascript:fieldSubmit()"]')
