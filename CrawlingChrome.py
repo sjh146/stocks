@@ -1,7 +1,7 @@
 import pandas as ps  
 from selenium import webdriver
 from selenium.webdriver.edge import service
-from selenium.webdriver.common.keys import Keys
+
 from selenium.webdriver.common.by import By
 from io import StringIO
 import os
@@ -17,7 +17,7 @@ options.use_chromium = True
 options.add_experimental_option('detach',True)
 
 options.binary_location ="C:\Program Files\Google\Chrome\Application\chrome.exe"
-s = service.Service("C:/Users/Admin/chromedriver-win64/chromedriver-win64/chromedriver.exe")
+s = service.Service("./chromedriver-win64/chromedriver.exe")
 
 browser=webdriver.Chrome(options=options, service = s)
 
@@ -35,6 +35,16 @@ checkboxes=browser.find_elements(By.NAME,'fieldIds')
 for checkbox in checkboxes:
     if checkbox.is_selected():
         checkbox.click()
+
+MarketPrice='시가'
+TradingVolume='거래량'
+CostLiness='고가'
+LowPrice='저가'
+BidPrice='매수호가'
+
+
+
+
 
 items_to_select =['시가','거래량','매출액']
 
