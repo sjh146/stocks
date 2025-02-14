@@ -2,11 +2,10 @@ import os
 import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QCheckBox, QPushButton
 from PyQt5.QtCore import Qt
-#from CrawlingChrome import items_to_select as cc
-#from CrawlingChrome import Crawl 
+
 import pandas as ps  
 from selenium import webdriver
-from selenium.webdriver.chrome import service
+#from selenium.webdriver.chrome import service
 
 from selenium.webdriver.common.by import By
 from io import StringIO
@@ -19,8 +18,6 @@ except:
 
 class MyApp(QWidget):
 
-    
-    
     MarketPrice='시가'
     TradingVolume='거래량'
     CostLiness='고가'
@@ -90,27 +87,23 @@ class MyApp(QWidget):
         if state == Qt.Checked:
            self.items_to_select.append(self.BidPrice)
 
-    
-    #def Pbtn():
-        
-       
-
-    
-#브라우저
-    
 
     def Crawl(self):
    
-        options = webdriver.ChromeOptions()
-        options.add_experimental_option('excludeSwitches',['enable-logging'])
-        options.use_chromium = True
-        options.add_experimental_option('detach',True)
-
-        options.binary_location ="C:\Program Files\Google\Chrome\Application\chrome.exe"
-        s = service.Service("./chromedriver-win64")
-        #"C:/Users/Admin/chromedriver-win64/chromedriver-win64/chromedriver.exe"
-        #"./chromedriver-win64"
-        browser=webdriver.Chrome(options=options, service = s)
+        #options = webdriver.ChromeOptions()
+        #options.add_experimental_option('excludeSwitches',['enable-logging'])
+        #options.use_chromium = True
+        #options.add_experimental_option('detach',True)
+        #options.binary_location ="C:\Program Files\Google\Chrome\Application\chrome.exe"
+        #s = service.Service("chromedriver-win64/chromedriver.exe")
+        #browser=webdriver.Chrome(options=options, service = s)
+        
+        if getattr(sys, 'frozen', False):   
+            chromedriver_path = os.path.join(sys._MEIPASS, "chromedriver.exe")   
+            browser = webdriver.Chrome(chromedriver_path) 
+        else:    
+            browser = webdriver.Chrome()
+        
         browser.maximize_window()
 
         url='https://finance.naver.com/sise/sise_market_sum.naver?&page='
