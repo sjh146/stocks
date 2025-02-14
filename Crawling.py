@@ -5,8 +5,7 @@ from PyQt5.QtCore import Qt
 
 import pandas as ps  
 from selenium import webdriver
-#from selenium.webdriver.chrome import service
-
+from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from io import StringIO
 try:
@@ -87,29 +86,48 @@ class MyApp(QWidget):
         if state == Qt.Checked:
            self.items_to_select.append(self.BidPrice)
 
+    def resource_path(relative_path):
+      
+        try:
+         # PyInstaller creates a temp folder and stores path in _MEIPASS
+            base_path = sys._MEIPASS
+        except Exception:
+            base_path = os.path.abspath(".")
 
+        return os.path.join(base_path, relative_path)
+    
+    
+    
+    
     def Crawl(self):
    
-        #options = webdriver.ChromeOptions()
-        #options.add_experimental_option('excludeSwitches',['enable-logging'])
-        #options.use_chromium = True
-        #options.add_experimental_option('detach',True)
-        #options.binary_location ="C:\Program Files\Google\Chrome\Application\chrome.exe"
-        #s = service.Service("chromedriver-win64/chromedriver.exe")
-        #browser=webdriver.Chrome(options=options, service = s)
         
-        if getattr(sys, 'frozen', False):   
-            chromedriver_path = os.path.join(sys._MEIPASS, "chromedriver.exe")   
-            browser = webdriver.Chrome(chromedriver_path) 
-        else:    
-            browser = webdriver.Chrome()
+        #"E:\ss\user\stocks\chromedriver.exe"
         
-        browser.maximize_window()
+        chromedriver_path = MyApp.resource_path("chromedriver.exe")
+        
 
+        options = webdriver.ChromeOptions()
+       
+        
+        options.add_argument('--headless')
+        options.add_argument('--disable-gpu')  # Optional: run in headless mode
+        service = Service(executable_path=chromedriver_path)
+        driver = webdriver.Chrome(service=service)
+       
         url='https://finance.naver.com/sise/sise_market_sum.naver?&page='
-        browser.get(url)
+        driver.get('https://finance.naver.com/sise/sise_market_sum.naver?&page=')
+        print(driver.title)
+        
+       
+       
+       
+      
+        
+        
 
-        checkboxes=browser.find_elements(By.NAME,'fieldIds')
+
+        checkboxes=driver.find_elements(By.NAME,'fieldIds')
         for checkbox in checkboxes:
             if checkbox.is_selected():
                 checkbox.click()
@@ -122,17 +140,17 @@ class MyApp(QWidget):
             if label.text in MyApp.items_to_select:
                 checkbox.click()
 
-        btn_apply=browser.find_element(By.XPATH,'//a[@href="javascript:fieldSubmit()"]')
+        btn_apply=driver.find_element(By.XPATH,'//a[@href="javascript:fieldSubmit()"]')
 
         btn_apply.click()
 
         for idx in range(1,40): #1이상 40미만 페이지 반복
         #사전 작업:페이지 이동
     
-            browser.get(url+str(idx))# http://naver.com....$page=2
+            driver.get(url+str(idx))# http://naver.com....$page=2
     
     
-            df=ps.read_html(StringIO(browser.page_source))[1]
+            df=ps.read_html(StringIO(driver.page_source))[1]
             df.dropna(axis='index',how='all',inplace=True)
             df.dropna(axis='columns',how='all',inplace=True)
             if len(df)==0:# 더이상가져올 데이터 없으면?
@@ -146,8 +164,8 @@ class MyApp(QWidget):
                 df.to_csv(f_name, encoding='utf-8-sig', index=False)
     
             print(f'{idx}페이지완료')
-
-        browser.quit()
+        
+        driver.quit()
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     ex = MyApp()
