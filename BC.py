@@ -1,4 +1,3 @@
-
 import sys
 import pyperclip
 import time
@@ -51,7 +50,7 @@ driver.maximize_window()
 driver.get('https://nid.naver.com/nidlogin.login?mode=form&url=https%3A%2F%2Fwww.naver.com')
 
 uid = 'sjh146'
-upw = ''
+upw = 'jhlee836060@'
 # Find the username and password fields
 tag_id = driver.find_element(By.NAME, 'id')
 tag_pw = driver.find_element(By.NAME, 'pw')
@@ -72,4 +71,3 @@ time.sleep(1)
 login_btn = driver.find_element(By.CSS_SELECTOR, '.btn_login')
 login_btn.click()
 time.sleep(2)
-
