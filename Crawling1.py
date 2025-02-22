@@ -10,13 +10,38 @@ from selenium.webdriver.common.by import By
 from io import StringIO
 from user_agent import generate_user_agent, generate_navigator
 import time
-#try:
-    #os.chdir(sys._MEIPASS)
-    #print(sys._MEIPASS)
-#except:
-    #os.chdir(os.getcwd())
 
 class MyApp(QWidget):
+    def resource_path(relative_path):
+      
+        try:
+         # PyInstaller creates a temp folder and stores path in _MEIPASS
+            base_path = sys._MEIPASS
+        except Exception:
+            base_path = os.path.abspath(".")
+
+        return os.path.join(base_path, relative_path)
+    
+    navigator = generate_navigator()
+    print(navigator)
+    print(navigator['platform'])
+        
+    header=generate_user_agent(os='win', device_type='desktop')
+    #header='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36'
+    chromedriver_path = resource_path("chromedriver.exe")
+        
+    options = webdriver.ChromeOptions()
+    options.add_argument('user-agent=' + header)
+    options.add_argument("disable-blink-features=AutomationControlled")
+
+    options.add_experimental_option("detach",True)
+    options.add_experimental_option("excludeSwitches", ["enable-automation"])
+    options.add_experimental_option('useAutomationExtension', False)
+        
+    #options.add_argument('--headless')
+    #options.add_argument('--disable-gpu')  # Optional: run in headless mode
+    service = Service(executable_path=chromedriver_path)
+    
 
     MarketPrice='시가'
     TradingVolume='거래량'
@@ -96,28 +121,10 @@ class MyApp(QWidget):
         return os.path.join(base_path, relative_path)
     
     def Crawl(self):
-   
-        navigator = generate_navigator()
-        print(navigator)
-        print(navigator['platform'])
         
-        header=generate_user_agent(os='win', device_type='desktop')
-        #header='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36'
-        chromedriver_path = MyApp.resource_path("chromedriver.exe")
-        
-        options = webdriver.ChromeOptions()
-        options.add_argument('user-agent=' + header)
-        options.add_argument("disable-blink-features=AutomationControlled")
-
-        options.add_experimental_option("detach",True)
-        options.add_experimental_option("excludeSwitches", ["enable-automation"])
-        options.add_experimental_option('useAutomationExtension', False)
-        
-        #options.add_argument('--headless')
-        #options.add_argument('--disable-gpu')  # Optional: run in headless mode
-        service = Service(executable_path=chromedriver_path)
-        driver = webdriver.Chrome(service=service)
+        driver = webdriver.Chrome(service=MyApp.service)
         driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
+        
         url='https://finance.naver.com/sise/sise_market_sum.naver?&page='
         driver.get(url)
         print(driver.title)
