@@ -1,6 +1,4 @@
 
-
-
 import sys
 import pyperclip
 import time
@@ -12,9 +10,13 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 
+from user_agent import generate_user_agent, generate_navigator
+
+navigator = generate_navigator()
+print(navigator)
+print(navigator['platform'])
 
 
-import time
 def resource_path(relative_path):
       
         try:
@@ -26,17 +28,21 @@ def resource_path(relative_path):
         return os.path.join(base_path, relative_path)
  
 chromedriver_path =resource_path("chromedriver.exe")
-        
-
+header=generate_user_agent(os='win', device_type='desktop')       
+#header='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36'
 options = webdriver.ChromeOptions()
-
-        
 #options.add_argument('--headless')
 #options.add_argument('--disable-gpu')  # Optional: run in headless mode
+options.add_argument('user-agent=' + header)
+options.add_argument("disable-blink-features=AutomationControlled")
+
 options.add_experimental_option("detach",True)
+options.add_experimental_option("excludeSwitches", ["enable-automation"])
+options.add_experimental_option('useAutomationExtension', False)
+
 service= Service(executable_path=chromedriver_path)
 driver = webdriver.Chrome(service=service,options=options)
-       
+driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
 
 time.sleep(1)
 print(driver.title)
@@ -66,3 +72,4 @@ time.sleep(1)
 login_btn = driver.find_element(By.CSS_SELECTOR, '.btn_login')
 login_btn.click()
 time.sleep(2)
+

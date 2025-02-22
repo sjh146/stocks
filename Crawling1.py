@@ -8,6 +8,8 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from io import StringIO
+from user_agent import generate_user_agent, generate_navigator
+
 try:
     os.chdir(sys._MEIPASS)
     print(sys._MEIPASS)
@@ -101,32 +103,32 @@ class MyApp(QWidget):
     
     def Crawl(self):
    
-        
+        navigator = generate_navigator()
+        print(navigator)
+        print(navigator['platform'])
         #"E:\ss\user\stocks\chromedriver.exe"
-        
+        header=generate_user_agent(os='win', device_type='desktop')
         chromedriver_path = MyApp.resource_path("chromedriver.exe")
         
 
         options = webdriver.ChromeOptions()
-       
+        options.add_argument('user-agent=' + header)
+        options.add_argument("disable-blink-features=AutomationControlled")
+
+        options.add_experimental_option("detach",True)
+        options.add_experimental_option("excludeSwitches", ["enable-automation"])
+        options.add_experimental_option('useAutomationExtension', False)
         
-        options.add_argument('--headless')
-        options.add_argument('--disable-gpu')  # Optional: run in headless mode
+        #options.add_argument('--headless')
+        #options.add_argument('--disable-gpu')  # Optional: run in headless mode
         service = Service(executable_path=chromedriver_path)
         driver = webdriver.Chrome(service=service)
-       
+        driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
         url='https://finance.naver.com/sise/sise_market_sum.naver?&page='
         driver.get('https://finance.naver.com/sise/sise_market_sum.naver?&page=')
         print(driver.title)
         
        
-       
-       
-      
-        
-        
-
-
         checkboxes=driver.find_elements(By.NAME,'fieldIds')
         for checkbox in checkboxes:
             if checkbox.is_selected():
