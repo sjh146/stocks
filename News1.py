@@ -23,7 +23,7 @@ import telepot
 # 이유를 확인해 보니, 이제 xlsx는 지원을 안한다고 함. xls를 사용해야함. 
 # xlrd.biffh.XLRDError: Excel xlsx file; not supported
 
-file = 'keyword.csv' # xlsx -> xls로 변경
+file = 'keyword1 .csv' # xlsx -> xls로 변경
 df = pd.read_csv(file)
 print(type(df))
 print(df.keys())
