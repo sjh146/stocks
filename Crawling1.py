@@ -9,13 +9,12 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from io import StringIO
 from user_agent import generate_user_agent, generate_navigator
-
-try:
-    os.chdir(sys._MEIPASS)
-    print(sys._MEIPASS)
-except:
-    os.chdir(os.getcwd())
-
+import time
+#try:
+    #os.chdir(sys._MEIPASS)
+    #print(sys._MEIPASS)
+#except:
+    #os.chdir(os.getcwd())
 
 class MyApp(QWidget):
 
@@ -28,8 +27,6 @@ class MyApp(QWidget):
     def __init__(self):
         super().__init__()
         self.initUI()
-   
-   
    
     def initUI(self):
          
@@ -98,19 +95,16 @@ class MyApp(QWidget):
 
         return os.path.join(base_path, relative_path)
     
-    
-    
-    
     def Crawl(self):
    
         navigator = generate_navigator()
         print(navigator)
         print(navigator['platform'])
-        #"E:\ss\user\stocks\chromedriver.exe"
+        
         header=generate_user_agent(os='win', device_type='desktop')
+        #header='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36'
         chromedriver_path = MyApp.resource_path("chromedriver.exe")
         
-
         options = webdriver.ChromeOptions()
         options.add_argument('user-agent=' + header)
         options.add_argument("disable-blink-features=AutomationControlled")
@@ -125,10 +119,11 @@ class MyApp(QWidget):
         driver = webdriver.Chrome(service=service)
         driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
         url='https://finance.naver.com/sise/sise_market_sum.naver?&page='
-        driver.get('https://finance.naver.com/sise/sise_market_sum.naver?&page=')
+        driver.get(url)
         print(driver.title)
+        time.sleep(1)
         
-       
+
         checkboxes=driver.find_elements(By.NAME,'fieldIds')
         for checkbox in checkboxes:
             if checkbox.is_selected():
