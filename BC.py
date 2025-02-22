@@ -51,7 +51,7 @@ driver.maximize_window()
 driver.get('https://nid.naver.com/nidlogin.login?mode=form&url=https%3A%2F%2Fwww.naver.com')
 
 uid = 'sjh146'
-upw = 'jhlee836060@'
+upw = ''
 # Find the username and password fields
 tag_id = driver.find_element(By.NAME, 'id')
 tag_pw = driver.find_element(By.NAME, 'pw')
