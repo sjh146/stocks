@@ -46,25 +46,23 @@ driver.get('https://nid.naver.com/nidlogin.login?mode=form&url=https%3A%2F%2Fwww
 
 uid = 'sjh146'
 upw = 'jhlee836060@'
-tag_id = driver.find_element(By.CSS_SELECTOR,'id')
-#패스워드 입력폼
-tag_pw = driver.find_element(By.CSS_SELECTOR,'pw')
+# Find the username and password fields
+tag_id = driver.find_element(By.NAME, 'id')
+tag_pw = driver.find_element(By.NAME, 'pw')
 
-# id 입력
-# 입력폼 클릭 -> paperclip에 선언한 uid 내용 복사 -> 붙여넣기
-tag_id.click()
+# Use pyperclip to copy and paste the username
 pyperclip.copy(uid)
-tag_id.send_keys(Keys.CONTROL, 'v')
+tag_id.click()
+tag_id.send_keys(Keys.CONTROL, 'v')  # Paste using Ctrl+V
 time.sleep(1)
 
-# pw 입력
-# 입력폼 클릭 -> paperclip에 선언한 upw 내용 복사 -> 붙여넣기
-tag_pw.click()
+# Use pyperclip to copy and paste the password
 pyperclip.copy(upw)
-tag_pw.send_keys(Keys.CONTROL, 'v')
+tag_pw.click()
+tag_pw.send_keys(Keys.CONTROL, 'v')  # Paste using Ctrl+V
 time.sleep(1)
 
-#로그인 버튼 클릭
-login_btn = driver.find_element(By.CSS_SELECTOR,'log.login')
+# Find and click the login button
+login_btn = driver.find_element(By.CSS_SELECTOR, '.btn_login')
 login_btn.click()
 time.sleep(2)
