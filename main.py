@@ -2,6 +2,7 @@ import eel
 import sys
 import pyperclip
 import time
+import sqlite3
 
 from selenium import webdriver
 import os
@@ -12,6 +13,21 @@ from selenium.webdriver.common.keys import Keys
 
 from user_agent import generate_user_agent, generate_navigator
 eel.init('web')
+
+@eel.expose
+def get_blog_list(usn,uid,upw):
+    usn=''
+    uid=''
+    upw=''
+    conn = sqlite3.connect('blog.db')
+    c = conn.cursor()
+    c.execute("INSERT INTO blog VALUES ({},{},{})".format(usn,uid,upw))
+    c.execute("SELECT * FROM blog")
+    result = c.fetchall()
+    print(result)
+    conn.close()
+    return result
+
 @eel.expose
 def resource_path(relative_path):
       
@@ -25,7 +41,7 @@ def resource_path(relative_path):
  
 
 @eel.expose
-def crawl():
+def crawl(uid,upw):
     navigator = generate_navigator()
     print(navigator)
     print(navigator['platform'])
@@ -52,8 +68,8 @@ def crawl():
     #로그인 메뉴 클릭
     driver.get('https://nid.naver.com/nidlogin.login?mode=form&url=https%3A%2F%2Fwww.naver.com')
 
-    uid = 'sjh146'
-    upw = 'jhlee836060@'
+    #uid = 'sjh146'
+    #upw = 'jhlee836060@'
     # Find the username and password fields
     tag_id = driver.find_element(By.NAME, 'id')
     tag_pw = driver.find_element(By.NAME, 'pw')
