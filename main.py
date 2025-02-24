@@ -3,14 +3,12 @@ import sys
 import pyperclip
 import time
 import sqlite3
-
 from selenium import webdriver
 import os
 import sys
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
-
 from user_agent import generate_user_agent, generate_navigator
 eel.init('web')
 
@@ -74,7 +72,7 @@ def crawl(uid,upw):
     driver.maximize_window()
     #로그인 메뉴 클릭
     driver.get('https://nid.naver.com/nidlogin.login?mode=form&url=https%3A%2F%2Fwww.naver.com')
-
+     
     # Find the username and password fields
     tag_id = driver.find_element(By.NAME, 'id')
     tag_pw = driver.find_element(By.NAME, 'pw')
@@ -95,7 +93,25 @@ def crawl(uid,upw):
     login_btn = driver.find_element(By.CSS_SELECTOR, '.btn_login')
     login_btn.click()
     time.sleep(2)
+    
+    #Find, click adn type in the search_box
+    search_box =driver.find_element(By.CSS_SELECTOR,'#query')
+    search_box.click()
+    search_box.send_keys('네이버블로그')
+    search_btn =driver.find_element(By.CSS_SELECTOR,'#search-btn')
+    search_btn.click()
+    time.sleep(2)
+    
+    #Find and click naverblog
+    driver.execute_script("window.scrollTo(0, 500)")
+    nblog=driver.find_element(By.CSS_SELECTOR,'#main_pack > section.sc_new.sp_nsite._project_channel_site_root._fe_site_collection._prs_vsd_bas > div > div > div.nsite_tit > div > div.nsite_name > a > mark')
+    nblog.click()
+    time.sleep(1)
+
+    write_btn=driver.find_element(By.CSS_SELECTOR,'#container > div > aside > div > div:nth-child(1) > nav > a:nth-child(2)')
+    write_btn.click()
 
     with sqlite3.connect('blog.db') as conn:
         conn.close()
 eel.start('index.html', size=(600, 400))
+ #SE-99c10990-f8cf-4208-9ea2-0bda71528e48 > div.se-wrap.se-dnd-wrap > div > div.se-popup.__se-sentry.se-popup-alert.se-popup-alert-confirm > div.se-popup-container.__se-pop-layer > div.se-popup-button-container > button.se-popup-button.se-popup-button-confirm > span
