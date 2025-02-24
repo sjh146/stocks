@@ -15,19 +15,22 @@ from user_agent import generate_user_agent, generate_navigator
 eel.init('web')
 
 @eel.expose
-def get_blog_list(usn,uid,upw):
-    usn=''
-    uid=''
-    upw=''
-    conn = sqlite3.connect('blog.db')
-    c = conn.cursor()
-    c.execute("INSERT INTO blog VALUES ({},{},{})".format(usn,uid,upw))
-    c.execute("SELECT * FROM blog")
-    result = c.fetchall()
-    print(result)
-    conn.close()
-    return result
+def insert_blog(uun, uid, upw):
+    with sqlite3.connect('blog.db') as conn:
+        c = conn.cursor()
+        c.execute('CREATE TABLE IF NOT EXISTS blog ( uun TEXT PRIMARY KEY AUTOINCREMENT, uid TEXT NOT NULL, upw TEXT NOT NULL)')
+        c.execute("INSERT INTO blog (uun, uid, upw) VALUES (?, ?, ?)", (uun, uid, upw))
+        c.execute("SELECT * FROM blog ")
+        results = c.fetchall()
+        for result in results:
+            print(result)
+        
+        conn.commit()
+        crawl(uid,upw)
+        conn.close()
+    return uid,upw
 
+    
 @eel.expose
 def resource_path(relative_path):
       
