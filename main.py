@@ -27,9 +27,14 @@ def insert_blog(uun, uid, upw):
         
         conn.commit()
         crawl(uid,upw)
-        conn.close()
-    return uid,upw
-
+        
+@eel.expose
+def delete_blog(sdata):
+    with sqlite3.connect('blog.db') as conn:
+        c = conn.cursor()
+        c.execute('DELETE FROM blog WHERE uun = ?', (sdata,))
+        conn.commit()
+        
     
 @eel.expose
 def resource_path(relative_path):
@@ -42,7 +47,6 @@ def resource_path(relative_path):
 
         return os.path.join(base_path, relative_path)
  
-
 @eel.expose
 def crawl(uid,upw):
     navigator = generate_navigator()
@@ -93,4 +97,7 @@ def crawl(uid,upw):
     login_btn = driver.find_element(By.CSS_SELECTOR, '.btn_login')
     login_btn.click()
     time.sleep(2)
+
+    with sqlite3.connect('blog.db') as conn:
+        conn.close()
 eel.start('index.html', size=(600, 400))
