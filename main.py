@@ -12,16 +12,6 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from user_agent import generate_user_agent, generate_navigator
 
-def llama():
-    response=ollama.chat(model='llama3',messages=[
-        {
-            'role':'user',
-            'content':'You are a helpful assistant',
-
-        },
-    
-    ])
-    print(response['message']['content'])
 eel.init('web')
 @eel.expose
 def insert_blog(uun, uid, upw):
@@ -126,7 +116,15 @@ def crawl(uid,upw):
     write_btn.click()
     time.sleep(1)
 
+    blog_title=ollama.chat(model='llama3',messages=[
+        {
+            'role':'user',
+            'content':'your good assistant',
 
+        },
+    
+    ])
+    blog_title['message']['content']
 
     with sqlite3.connect('blog.db') as conn:
         conn.close()
