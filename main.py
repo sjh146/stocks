@@ -1,3 +1,4 @@
+import ollama
 import eel
 import sys
 import pyperclip
@@ -10,8 +11,18 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from user_agent import generate_user_agent, generate_navigator
-eel.init('web')
 
+def llama():
+    response=ollama.chat(model='llama3',messages=[
+        {
+            'role':'user',
+            'content':'You are a helpful assistant',
+
+        },
+    
+    ])
+    print(response['message']['content'])
+eel.init('web')
 @eel.expose
 def insert_blog(uun, uid, upw):
     with sqlite3.connect('blog.db') as conn:
@@ -62,7 +73,8 @@ def crawl(uid,upw):
     options.add_experimental_option("detach",True)
     options.add_experimental_option("excludeSwitches", ["enable-automation"])
     options.add_experimental_option('useAutomationExtension', False)
-
+    #options.add_experimental_option('debuggerAddress', '127.0.0.1:9222')
+    # --enable-logging --v=1
     service= Service(executable_path=chromedriver_path)
     driver = webdriver.Chrome(service=service,options=options)
     driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
