@@ -106,10 +106,15 @@ def crawl(uid,upw):
     driver.execute_script("window.scrollTo(0, 500)")
     nblog=driver.find_element(By.CSS_SELECTOR,'#main_pack > section.sc_new.sp_nsite._project_channel_site_root._fe_site_collection._prs_vsd_bas > div > div > div.nsite_tit > div > div.nsite_name > a > mark')
     nblog.click()
-    time.sleep(1)
-
+    time.sleep(2)
+    
+    #Find and click write_btn
+    driver.switch_to.window(driver.window_handles[1])
     write_btn=driver.find_element(By.CSS_SELECTOR,'#container > div > aside > div > div:nth-child(1) > nav > a:nth-child(2)')
     write_btn.click()
+    time.sleep(1)
+
+
 
     with sqlite3.connect('blog.db') as conn:
         conn.close()
