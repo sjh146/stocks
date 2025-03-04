@@ -17,4 +17,5 @@ $(function() {
         sdata = document.getElementById('search').value;
         eel.delete_blog(sdata)   
     }); 
+    
 });
