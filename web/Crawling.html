@@ -12,22 +12,31 @@
     <h1>퀀트 크롤링</h1>
     <fieldset>
         <legend>가져올 데이터를 고르시오:</legend>
-      
+        <p id="output"></p>
+
         <div>
-          <input type="checkbox" id="scales" name="scales" checked />
-          <label for="scales">Scales</label>
+          <input type="checkbox" id="MarketPrice" name="stock" values='시가' checked />
+          <label for="scales">시가</label>
         </div>
-      
         <div>
-          <input type="checkbox" id="horns" name="horns" />
-          <label for="horns">Horns</label>
+          <input type="checkbox" id="TradingVolume" name="stock" values='거래량'/>
+          <label for="horns">거래량</label>
         </div>
-      </fieldset>
+        <div>
+            <input type="checkbox" id="CostLiness" name="stock" values="고가"/>
+            <label for="horns">고가</label>
+        </div>
+        <div>
+            <input type="checkbox" id="LowPrice" name="stock" values="저가"/>
+            <label for="horns">저가</label>
+        </div>
+        <div>
+            <input type="checkbox" id="BidPrice" name="stock" values="매수호가"/>
+            <label for="horns">매수호가</label>
+        </div>
+    </fieldset>
 
-
-
-
-
-
+    <input type='button' value='111' onclick='sendCheckboxState()' />
+    
 
 </body>

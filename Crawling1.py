@@ -10,41 +10,22 @@ from user_agent import generate_user_agent
 import time
 
 eel.init('web')
+items_to_select=[]
+
 @eel.expose
-def resource_path(relative_path):
-      
-    try:
-         # PyInstaller creates a temp folder and stores path in _MEIPASS
-        base_path = sys._MEIPASS
-    except Exception:
-        base_path = os.path.abspath(".")
+def handle_checkbox_state(is_checked):
+    if is_checked:
+        return "Checkbox is checked!"
+    else:
+        return "Checkbox is unchecked."
 
-    return os.path.join(base_path, relative_path)
-    
+@eel.expose
+def get_start():
+    Crawl(items_to_select)
 
-header=generate_user_agent(os='win', device_type='desktop')
-#header='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36'
-chromedriver_path = resource_path("chromedriver.exe")
         
-options = webdriver.ChromeOptions()
-options.add_argument('user-agent=' + header)
-options.add_argument("disable-blink-features=AutomationControlled")
 
-options.add_experimental_option("detach",True)
-options.add_experimental_option("excludeSwitches", ["enable-automation"])
-options.add_experimental_option('useAutomationExtension', False)
-        
-#options.add_argument('--headless')
-#options.add_argument('--disable-gpu')  # Optional: run in headless mode
-service = Service(executable_path=chromedriver_path)
-    
 
-MarketPrice='시가'
-TradingVolume='거래량'
-CostLiness='고가'
-LowPrice='저가'
-BidPrice='매수호가'
-    
 def resource_path(relative_path):
       
     try:
@@ -55,9 +36,23 @@ def resource_path(relative_path):
 
     return os.path.join(base_path, relative_path)
     
-def Crawl(self):
+def Crawl():
+    header=generate_user_agent(os='win', device_type='desktop')
+    #header='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36'
+    chromedriver_path = resource_path("chromedriver.exe")
         
-    driver = webdriver.Chrome(service=MyApp.service)
+    options = webdriver.ChromeOptions()
+    options.add_argument('user-agent=' + header)
+    options.add_argument("disable-blink-features=AutomationControlled")
+
+    options.add_experimental_option("detach",True)
+    options.add_experimental_option("excludeSwitches", ["enable-automation"])
+    options.add_experimental_option('useAutomationExtension', False)
+        
+    #options.add_argument('--headless')
+    #options.add_argument('--disable-gpu')  # Optional: run in headless mode
+    service = Service(executable_path=chromedriver_path)    
+    driver = webdriver.Chrome(service=service)
     driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
         
     url='https://finance.naver.com/sise/sise_market_sum.naver?&page='
@@ -70,15 +65,15 @@ def Crawl(self):
     for checkbox in checkboxes:
         if checkbox.is_selected():
             checkbox.click()
-
+    time.sleep(1)
 
     for checkbox in checkboxes:
         parent=checkbox.find_element(By.XPATH,'..')
         label=parent.find_element(By.TAG_NAME,'label')
         # print(label.text)
-        if label.text in MyApp.items_to_select:
+        if label.text in items_to_select:
             checkbox.click()
-
+    time.sleep(1)
     btn_apply=driver.find_element(By.XPATH,'//a[@href="javascript:fieldSubmit()"]')
 
     btn_apply.click()

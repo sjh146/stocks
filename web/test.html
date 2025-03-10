@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkbox in Eel</title>
+</head>
+<body>
+    <h1>Checkbox Example</h1>
+    <label>
+        <input type="checkbox" id="myCheckbox"> Enable Feature
+    </label>
+    <br><br>
+    <button onclick="sendCheckboxState()">Submit</button>
+    <p id="output"></p>
+
+    <script type="text/javascript" src="/test.js"></script>
+    <script>
+        // Function to send checkbox state to Python
+        async function sendCheckboxState() {
+            const checkbox = document.getElementById("myCheckbox");
+            const isChecked = checkbox.checked;
+
+            // Call Python function with checkbox state
+            const response = await eel.handle_checkbox_state(isChecked)();
+            document.getElementById("output").innerText = response;
+        }
+    </script>
+</body>
+</html>
