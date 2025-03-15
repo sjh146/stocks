@@ -13,11 +13,13 @@ eel.init('web')
 items_to_select=[]
 
 @eel.expose
-def handle_checkbox_state(is_checked):
+def handle_checkbox_state(is_checked,checked_value):
     if is_checked:
-        return "Checkbox is checked!"
+        items_to_select.append(checked_value)
+        
+        return "{} is checked!".format(checked_value)
     else:
-        return "Checkbox is unchecked."
+        return "{} is unchecked.".format(checked_value)
 
 @eel.expose
 def get_start():
@@ -36,15 +38,15 @@ def resource_path(relative_path):
 
     return os.path.join(base_path, relative_path)
     
-def Crawl():
+def Crawl(items_to_select):
+    
     header=generate_user_agent(os='win', device_type='desktop')
     #header='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36'
     chromedriver_path = resource_path("chromedriver.exe")
         
     options = webdriver.ChromeOptions()
-    options.add_argument('user-agent=' + header)
+    options.add_argument('user-agent=' + header +'')
     options.add_argument("disable-blink-features=AutomationControlled")
-
     options.add_experimental_option("detach",True)
     options.add_experimental_option("excludeSwitches", ["enable-automation"])
     options.add_experimental_option('useAutomationExtension', False)
