@@ -40,6 +40,8 @@ def resource_path(relative_path):
     
 def Crawl(items_to_select):
     
+    if os.path.exists('sise.csv'):
+        os.remove('sise.csv')
     header=generate_user_agent(os='win', device_type='desktop')
     #header='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36'
     chromedriver_path = resource_path("chromedriver.exe")
