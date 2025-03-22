@@ -15,15 +15,15 @@ from bs4 import BeautifulSoup
 # 모듈 3. 뉴스 요약
 # 모듈 4. 뉴스 송부
 import time
-import telepot
-
+import telegram
+import asyncio
 ########################## 모듈 1. 키워드 등록 ##########################################################
 
 # pandas로 쉽게 엑셀을 열수있을것 같은데 안됨
 # 이유를 확인해 보니, 이제 xlsx는 지원을 안한다고 함. xls를 사용해야함. 
 # xlrd.biffh.XLRDError: Excel xlsx file; not supported
 
-file = 'keyword1 .csv' # xlsx -> xls로 변경
+file = 'keyword.csv' # xlsx -> xls로 변경
 df = pd.read_csv(file)
 print(type(df))
 print(df.keys())
@@ -75,10 +75,10 @@ for k in range(0,14):
 
     ########################## 모듈 4. 뉴스 송부  ######################################################
     # 텔레그램 봇 구동
-
+   
     token = "7903260976:AAEQtnBt1kBNGxdidPx6cHreMo5QgDSEXpM" 
     mc = "454953244"
-    bot = telepot.Bot(token)
+    bot = telegram.Bot(token)
 
     print(result.index)
     print(result.columns)
@@ -87,11 +87,12 @@ for k in range(0,14):
     print(c)
     print(d)
     # bot.sendMessage(chat_id = '@economystory', text = result.at[0,1]) 
+    loop = asyncio.get_event_loop() # 이벤트 루프를 얻음
     for i in range(0,10):
-        bot.sendMessage(chat_id = "-1002411723910", text = result.at[i,1]) 
+        loop.run_until_complete(bot.sendMessage(chat_id = "-1002411723910", text = result.at[i,1]))
         print('텔레그램으로 {}번 전송됐습니다.'.format(i+1))
         time.sleep(3) # 텔레그램에서 너무 많이 보내면 차단을 하니, 3초 간격을 두고 송부한다. 2초도 어느정도 하다 차단됨.
-
+        loop.close
 
     # # # 모듈 3. 뉴스 요약(미구현)
 
